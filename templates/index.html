@@ -3,14 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Post</title>
+    <title>Read Data</title>
 </head>
 <body>
-    <h1>Add a New Post</h1>
-    <form method="POST">
+    <h1>example_table list</h1>
+    
+    <!-- 新增資料表單 -->
+    <h2>Add New Post</h2>
+    <form method="POST" action="/add">
         <label for="post">Post:</label>
         <input type="text" id="post" name="post" required>
-        <button type="submit">Submit</button>
+        <input type="submit" value="Add Post">
     </form>
+
+    <!-- 顯示資料的表格 -->
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Post</th>
+            <th>Date</th>
+        </tr>
+        {% for data in tables %}
+        <tr>
+            <td>{{ data['id'] }}</td>
+            <td>{{ data['post'] }}</td>
+            <td>{{ data['created_at'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

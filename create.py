@@ -5,7 +5,7 @@ create_bp = Blueprint('create_bp', __name__)
 
 db_config = {
     'user': 'root',
-    'password': ')P:?9ol.',
+    'password': '',
     'host': 'localhost',
     'database': 'testdb'
 }
@@ -24,4 +24,4 @@ def add_post():
     cursor.close()
     conn.close()
     
-    return redirect(url_for('index'))
+    return redirect(url_for('read_bp.index'))  # Redirect to the main view

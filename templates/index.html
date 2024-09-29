@@ -2,34 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Read Data</title>
+    <title>Post List</title>
 </head>
 <body>
-    <h1>example_table list</h1>
-    
-    <!-- 新增資料表單 -->
-    <h2>Add New Post</h2>
-    <form method="POST" action="/add">
-        <label for="post">Post:</label>
-        <input type="text" id="post" name="post" required>
-        <input type="submit" value="Add Post">
+    <h1>Posts</h1>
+
+    <!-- Form to add a new post -->
+    <form action="{{ url_for('create_bp.add_post') }}" method="POST">  <!-- Update to create_bp -->
+        <input type="text" name="post" placeholder="Enter a new post">
+        <button type="submit">Add Post</button>
     </form>
 
-    <!-- 顯示資料的表格 -->
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Post</th>
-            <th>Date</th>
-        </tr>
-        {% for data in tables %}
-        <tr>
-            <td>{{ data['id'] }}</td>
-            <td>{{ data['post'] }}</td>
-            <td>{{ data['created_at'] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <h2>Existing Posts</h2>
+
+    <!-- Form to delete selected posts -->
+    <form action="{{ url_for('delete_bp.delete_posts') }}" method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Post</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="post_ids" value="{{ post.id }}">
+                    </td>
+                    <td>{{ post.post }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Delete Selected</button>
+    </form>
 </body>
 </html>

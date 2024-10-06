@@ -4,40 +4,68 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post List</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <title>Posts Management</title>
 </head>
 <body>
-    <h1>Posts</h1>
+    <div class="container">
+      <h1>Posts</h1>
 
-    <!-- Form to add a new post -->
-    <form action="{{ url_for('create_bp.add_post') }}" method="POST">  <!-- Update to create_bp -->
-        <input type="text" name="post" placeholder="Enter a new post">
-        <button type="submit">Add Post</button>
-    </form>
+<!-- Form to add a new post -->
+<form action="{{ url_for('create_bp.add_post') }}" method="POST">  
+    <div class="form-group">
+        <input type="text" class="form-control" name="post" placeholder="Enter a new post" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Post</button>
+</form>
 
-    <h2>Existing Posts</h2>
+<h2>Existing Posts</h2>
 
-    <!-- Form to delete selected posts -->
-    <form action="{{ url_for('delete_bp.delete_posts') }}" method="POST">
-        <table>
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Post</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for post in posts %}
-                <tr>
-                    <td>
-                        <input type="checkbox" name="post_ids" value="{{ post.id }}">
-                    </td>
-                    <td>{{ post.post }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit">Delete Selected</button>
-    </form>
+<!-- Form to delete selected posts and update existing ones -->
+<form action="{{ url_for('delete_bp.delete_posts') }}" method="POST">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>ID</th>
+                <th>Post</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="post_ids" value="{{ post.id }}">
+                </td>
+                <td>{{ post.id }}</td>
+                <td>
+                    <!-- Field for updating the post -->
+                    <input type="text" name="post_{{ post.id }}" class="form-control" value="{{ post.post }}" required>
+                </td>
+                <td>
+                    <!-- Update button for each post -->
+                    <button type="submit" formaction="{{ url_for('update_bp.update_post', post_id=post.id) }}" class="btn btn-success">Update</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-danger">Delete Selected</button>
+</form>
+
+    </div>
+
+    <!-- Bootstrap and JavaScript libraries -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Startup Log</title>
+</head>
+<body>
+    <h1>MongoDB Startup Log</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>_id</th>
+                <th>Hostname</th>
+                <th>Start Time (UTC)</th>
+                <th>Start Time (Local)</th>
+                <th>PID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in data %}
+            <tr>
+                <td>{{ document['_id'] }}</td>
+                <td>{{ document['hostname'] }}</td>
+                <td>{{ document['startTime'] }}</td>
+                <td>{{ document['startTimeLocal'] }}</td>
+                <td>{{ document['pid'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

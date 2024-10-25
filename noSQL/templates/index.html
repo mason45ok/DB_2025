@@ -3,31 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MongoDB Startup Log</title>
+    <title>Startup Log</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .content {
+            display: none;
+        }
+        .toggle-btn {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>MongoDB Startup Log</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>_id</th>
-                <th>Hostname</th>
-                <th>Start Time (UTC)</th>
-                <th>Start Time (Local)</th>
-                <th>PID</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for document in data %}
-            <tr>
-                <td>{{ document['_id'] }}</td>
-                <td>{{ document['hostname'] }}</td>
-                <td>{{ document['startTime'] }}</td>
-                <td>{{ document['startTimeLocal'] }}</td>
-                <td>{{ document['pid'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h1>Startup Log</h1>
+    <ul>
+        {% for item in data %}
+            <li>
+                <strong>Document ID: {{ item._id }}</strong>
+                <span class="toggle-btn">[Show Details]</span>
+                <ul class="content">
+                    {% for key, value in item.items() %}
+                        {% if key != '_id' %}
+                            <li>{{ key }}: {{ value }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{{ url_for('create') }}">Create New Entry</a>
+
+    <script>
+        // jQuery to toggle the visibility of the content
+        $(document).ready(function(){
+            $('.toggle-btn').click(function(){
+                $(this).next('.content').toggle();
+                // Change the text of the button based on visibility
+                if ($(this).next('.content').is(':visible')) {
+                    $(this).text('[Hide Details]');
+                } else {
+                    $(this).text('[Show Details]');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

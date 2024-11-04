@@ -4,50 +4,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Startup Log</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        .content {
-            display: none;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+        }
+        form input[type="text"], form button, form label {
+            margin: 10px;
+        }
+        form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            margin: 10px 0;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .toggle-btn {
             cursor: pointer;
-            color: blue;
+            color: #007bff;
             text-decoration: underline;
         }
+        .content {
+            display: none;
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 2px solid #ddd;
+        }
+        a.button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 20px auto;
+            background-color: #28a745;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+        }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>Startup Log</h1>
-    <ul>
-        {% for item in data %}
-            <li>
-                <strong>Document ID: {{ item._id }}</strong>
-                <span class="toggle-btn">[Show Details]</span>
-                <ul class="content">
-                    {% for key, value in item.items() %}
-                        {% if key != '_id' %}
-                            <li>{{ key }}: {{ value }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Startup Log</h1>
 
-    <br>
-    <a href="{{ url_for('create') }}">Create New Entry</a>
+        <!-- 搜尋表單 -->
+        <h2>Search Entries</h2>
+        <form method="POST" action="{{ url_for('search') }}">
+            <div class="form-group">
+                <label for="query">搜尋內容:</label>
+                <input type="text" id="query" name="query" required>
+                <button type="submit">搜尋</button>
+            </div>
+        </form>
+
+        <!-- 顯示全部 / 隱藏全部 按鈕 -->
+        <form method="GET" action="{{ url_for('show_all') }}" style="text-align: center;">
+            <button type="submit" class="button">
+                {% if show_all %}
+                    隱藏全部
+                {% else %}
+                    顯示全部
+                {% endif %}
+            </button>
+        </form>
+
+        <!-- 搜尋結果（僅在有搜尋輸入後顯示） -->
+        {% if results is not none %}
+            {% if results %}
+                <h2>搜尋結果:</h2>
+                {% for result in results %}
+                    <div class="card">
+                        <h3>Document ID: {{ result._id }}</h3>
+                        <span class="toggle-btn">[Show Details]</span>
+                        <div class="content">
+                            {% for key, value in result.items() %}
+                                {% if key != '_id' %}
+                                    <p><strong>{{ key }}:</strong> {{ value }}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center;">未找到匹配的結果。</p>
+            {% endif %}
+        {% endif %}
+
+        <!-- 全部資料展示列表 -->
+        {% if show_all %}
+            <hr>
+            <h2>所有記錄</h2>
+            {% for item in data %}
+                <div class="card">
+                    <h3>Document ID: {{ item._id }}</h3>
+                    <span class="toggle-btn">[Show Details]</span>
+                    <div class="content">
+                        {% for key, value in item.items() %}
+                            {% if key != '_id' %}
+                                <p><strong>{{ key }}:</strong> {{ value }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <a href="{{ url_for('create') }}" class="button">Create New Entry</a>
+    </div>
 
     <script>
-        // jQuery to toggle the visibility of the content
         $(document).ready(function(){
             $('.toggle-btn').click(function(){
                 $(this).next('.content').toggle();
-                // Change the text of the button based on visibility
-                if ($(this).next('.content').is(':visible')) {
-                    $(this).text('[Hide Details]');
-                } else {
-                    $(this).text('[Show Details]');
-                }
+                $(this).text($(this).next('.content').is(':visible') ? '[Hide Details]' : '[Show Details]');
             });
         });
     </script>

@@ -2,10 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from bson.objectid import ObjectId
 from config import collection  # Import collection from config.py
 from update import update_bp  # Import the update blueprint
+from delete import delete_bp  # Import the delete blueprint
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.register_blueprint(update_bp)
+app.register_blueprint(delete_bp)
 
 # Display documents (Read)
 @app.route('/')

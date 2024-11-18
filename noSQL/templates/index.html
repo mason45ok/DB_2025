@@ -86,6 +86,19 @@
         .edit-button {
             background-color: #007bff;
         }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -122,9 +135,11 @@
                                 <p><strong>{{ key }}:</strong> {{ value }}</p>
                             {% endif %}
                         {% endfor %}
-                        <!-- Link to update route for editing this item -->
                         <a href="{{ url_for('update.update', id=item._id) }}" class="button edit-button">Edit</a>
-                    </div>
+                        <form action="{{ url_for('delete.delete', id=item._id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="button delete-button" style="background-color: #dc3545;">Delete</button>
+                        </form>
+                    </div>                    
                 </div>
             {% endfor %}
         {% else %}

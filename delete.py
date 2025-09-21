@@ -5,9 +5,9 @@ delete_bp = Blueprint('delete_bp', __name__)
 
 db_config = {
     'user': 'root',
-    'password': '',
+    'password': '@Mason45ok',
     'host': 'localhost',
-    'database': 'testdb'
+    'database': 'db_2025'
 }
 
 @delete_bp.route('/delete', methods=['POST'])

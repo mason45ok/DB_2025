@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新增員工資料</title>
+  <script>
+    // 呼叫 Flask API 新增員工
+    async function addEmployee() {
+      const employee_ID = document.getElementById('employee_ID').value;
+      const employee_name = document.getElementById('employee_name').value;
+      const first_name = document.getElementById('first_name').value;
+      const last_name = document.getElementById('last_name').value;
+
+      if (!employee_ID || !employee_name || !first_name || !last_name) {
+        alert("請完整填寫所有欄位！");
+        return;
+      }
+
+      const response = await fetch('/add_employee', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ employee_ID, employee_name, first_name, last_name })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        document.getElementById('employee_ID').value = '';
+        document.getElementById('employee_name').value = '';
+        document.getElementById('first_name').value = '';
+        document.getElementById('last_name').value = '';
+      } else {
+        alert("錯誤：" + result.error);
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>新增員工資料</h2>
+    <input type="number" id="employee_ID" placeholder="員工 ID">
+    <input type="text" id="employee_name" placeholder="員工姓名 (全名)">
+    <input type="text" id="first_name" placeholder="名 (First Name)">
+    <input type="text" id="last_name" placeholder="姓 (Last Name)">
+    <button onclick="addEmployee()">新增員工</button>
+  </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template_string, redirect, url_for
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 from bson.objectid import ObjectId # 用於處理 MongoDB 的 _id
 import os
 import logging
@@ -23,10 +24,15 @@ app = Flask(__name__)
 # --- 2. 連接 MongoDB ---
 # 確保您的 MongoDB 服務正在本機 (localhost) 的 27017 埠運行
 # 否則請更改下方的連接字串
+
+url = (f'mongodb+srv://41171112h_db_user:{PASSWORD}@cluster0.r7apuot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+
 try:
     # 僅在 PASSWORD 存在時嘗試連接
     if PASSWORD:
-        client = MongoClient(f'mongodb+srv://41171112h_db_user:{PASSWORD}@cluster0.r7apuot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+        client = MongoClient(url, server_api=ServerApi('1'))
+        #client = MongoClient(f'mongodb+srv://41171112h_db_user:{PASSWORD}@cluster0.r7apuot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+        #client.admin.command('ping')
         client.server_info() # 嘗試連接以觸發錯誤
         db = client['flask_demo_db'] # 選擇一個資料庫
         collection = db['users']      # 選擇一個集合 (collection)
@@ -228,4 +234,4 @@ def delete_user(id):
 # --- 5. 運行應用 ---
 if __name__ == '__main__':
     # debug=True 讓我們在開發時能看到錯誤，並在修改程式碼後自動重啟
-    app.run(debug=True)
+    app.run(debug=True, host = "0.0.0.0", port = "8080")
